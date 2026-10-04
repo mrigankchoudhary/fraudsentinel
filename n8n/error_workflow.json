@@ -1,0 +1,93 @@
+{
+  "name": "FraudSentinel — Error Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Node 20 — any node failure becomes an exception case for a human, never a\n// silently dropped alert.\nconst e = $input.first().json;\nreturn [{ json: {\n  case_id: e.execution?.id || crypto.randomUUID(),\n  alert_id: e.execution?.data?.alert_id || null,\n  route: 'EXCEPTION', ahe: 'E', status: 'awaiting_human',\n  recommendation: { exception_stage: e.execution?.lastNodeExecuted || 'unknown',\n                    exception_reason: e.execution?.error?.message || 'workflow failure' },\n} }];"
+      },
+      "id": "shape-exception",
+      "name": "Shape Exception",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/cases",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "create-exception-case",
+      "name": "Create Exception Case",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        200,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Shape Exception",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape Exception": {
+      "main": [
+        [
+          {
+            "node": "Create Exception Case",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "fraudsentinel"
+    }
+  ]
+}

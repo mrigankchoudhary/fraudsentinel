@@ -1,0 +1,8 @@
+# The app, the orchestrator, the agents, the guardrails and the test suite run on
+# the Python standard library alone — nothing here is needed to demo the PoC
+# locally with `python3 app/server.py`.
+#
+# These are needed only for the two hosted/reporting paths:
+
+streamlit>=1.37      # streamlit_app.py — the front-end for Streamlit Community Cloud
+matplotlib>=3.8      # benchmark/run_benchmark.py figures; skipped gracefully if absent

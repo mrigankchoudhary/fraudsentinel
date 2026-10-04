@@ -1,0 +1,38 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="figure-1-as-is">
+    <mxGraphModel dx="1100" dy="800" grid="1" gridSize="10" page="1"
+        pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="n" value="Import figure-1-as-is.svg here (File &gt; Import) to edit, or edit docs/diagrams/make_diagrams.py and regenerate."
+          style="text;html=1;align=left;verticalAlign=top;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="760" height="60" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="figure-2-to-be">
+    <mxGraphModel dx="1100" dy="800" grid="1" gridSize="10" page="1"
+        pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="n" value="Import figure-2-to-be.svg here (File &gt; Import) to edit, or edit docs/diagrams/make_diagrams.py and regenerate."
+          style="text;html=1;align=left;verticalAlign=top;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="760" height="60" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="figure-3-architecture">
+    <mxGraphModel dx="1100" dy="800" grid="1" gridSize="10" page="1"
+        pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="n" value="Import figure-3-architecture.svg here (File &gt; Import) to edit, or edit docs/diagrams/make_diagrams.py and regenerate."
+          style="text;html=1;align=left;verticalAlign=top;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="760" height="60" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

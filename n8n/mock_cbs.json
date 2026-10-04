@@ -1,0 +1,107 @@
+{
+  "name": "FraudSentinel — Mock Core Banking API",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "case_id"
+            },
+            {
+              "name": "action"
+            },
+            {
+              "name": "reason"
+            }
+          ]
+        }
+      },
+      "id": "when-called",
+      "name": "When Called",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Mock core banking. Agents cannot reach this workflow: only the post-approval\n// branch and the deterministic hard-flag branch call it (guide 6.8).\nconst { case_id, action, reason } = $input.first().json;\nconst RESULTS = {\n  release:  { status: 'released',     message: 'Debit released to the beneficiary.' },\n  verify:   { status: 'step_up_sent', message: 'OTP / call-back verification raised.' },\n  hold:     { status: 'held',         message: 'Temporary hold placed. Not an account closure.' },\n  escalate: { status: 'escalated',    message: 'Referred to L2 and the AML queue.' },\n};\nif (!RESULTS[action]) throw new Error('unknown core banking action: ' + action);\nreturn [{ json: { case_id, action, reason,\n  response: Object.assign({ reference: 'CBS-' + crypto.randomUUID().slice(0, 10).toUpperCase() },\n                          RESULTS[action]) } }];"
+      },
+      "id": "perform-action",
+      "name": "Perform Action",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/actions",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ case_id: $json.case_id, action: $json.action, endpoint: '/cbs/' + $json.action, request: { reason: $json.reason }, response: $json.response }) }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "write-action-row",
+      "name": "Write Action Row",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        200,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "When Called": {
+      "main": [
+        [
+          {
+            "node": "Perform Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perform Action": {
+      "main": [
+        [
+          {
+            "node": "Write Action Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "fraudsentinel"
+    }
+  ]
+}

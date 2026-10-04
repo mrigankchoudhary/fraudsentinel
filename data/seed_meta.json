@@ -1,0 +1,12 @@
+{
+  "seed": 20261002,
+  "reference_now": "2026-10-02T14:30:00+00:00",
+  "counts": {
+    "customers": 84,
+    "beneficiaries": 217,
+    "transactions": 5103,
+    "devices_logins": 104,
+    "mule_watchlist": 6,
+    "alerts": 46
+  }
+}

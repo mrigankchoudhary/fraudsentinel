@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+data/fraudsentinel.db
+data/fraudsentinel.db-wal
+data/fraudsentinel.db-shm
+benchmark/results/*.csv
+benchmark/results/*.json
+.DS_Store
+.env
+.env.local

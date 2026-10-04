@@ -1,0 +1,212 @@
+[
+  {
+    "id": "ALT-B001",
+    "class": "normal",
+    "expected": "PROCEED",
+    "customer_id": "CUST-B001",
+    "amount": 6095.88
+  },
+  {
+    "id": "ALT-B002",
+    "class": "normal",
+    "expected": "PROCEED",
+    "customer_id": "CUST-B002",
+    "amount": 4529.15
+  },
+  {
+    "id": "ALT-B003",
+    "class": "normal",
+    "expected": "PROCEED",
+    "customer_id": "CUST-B003",
+    "amount": 4814.54
+  },
+  {
+    "id": "ALT-B004",
+    "class": "normal",
+    "expected": "PROCEED",
+    "customer_id": "CUST-B004",
+    "amount": 6548.26
+  },
+  {
+    "id": "ALT-B005",
+    "class": "normal",
+    "expected": "PROCEED",
+    "customer_id": "CUST-B005",
+    "amount": 4235.06
+  },
+  {
+    "id": "ALT-B006",
+    "class": "normal",
+    "expected": "PROCEED",
+    "customer_id": "CUST-B006",
+    "amount": 6693.85
+  },
+  {
+    "id": "ALT-B007",
+    "class": "normal",
+    "expected": "PROCEED",
+    "customer_id": "CUST-B007",
+    "amount": 5339.36
+  },
+  {
+    "id": "ALT-B008",
+    "class": "normal",
+    "expected": "PROCEED",
+    "customer_id": "CUST-B008",
+    "amount": 3865.58
+  },
+  {
+    "id": "ALT-B009",
+    "class": "normal",
+    "expected": "PROCEED",
+    "customer_id": "CUST-B009",
+    "amount": 5958.53
+  },
+  {
+    "id": "ALT-B010",
+    "class": "normal",
+    "expected": "PROCEED",
+    "customer_id": "CUST-B010",
+    "amount": 2458.06
+  },
+  {
+    "id": "ALT-B011",
+    "class": "ambiguous",
+    "expected": "VERIFY",
+    "customer_id": "CUST-B011",
+    "amount": 14867.94
+  },
+  {
+    "id": "ALT-B012",
+    "class": "ambiguous",
+    "expected": "VERIFY",
+    "customer_id": "CUST-B012",
+    "amount": 17953.51
+  },
+  {
+    "id": "ALT-B013",
+    "class": "ambiguous",
+    "expected": "VERIFY",
+    "customer_id": "CUST-B013",
+    "amount": 15247.0
+  },
+  {
+    "id": "ALT-B014",
+    "class": "ambiguous",
+    "expected": "VERIFY",
+    "customer_id": "CUST-B014",
+    "amount": 40390.88
+  },
+  {
+    "id": "ALT-B015",
+    "class": "ambiguous",
+    "expected": "VERIFY",
+    "customer_id": "CUST-B015",
+    "amount": 12193.0
+  },
+  {
+    "id": "ALT-B016",
+    "class": "ambiguous",
+    "expected": "VERIFY",
+    "customer_id": "CUST-B016",
+    "amount": 33491.29
+  },
+  {
+    "id": "ALT-B017",
+    "class": "ambiguous",
+    "expected": "VERIFY",
+    "customer_id": "CUST-B017",
+    "amount": 27364.96
+  },
+  {
+    "id": "ALT-B018",
+    "class": "ambiguous",
+    "expected": "VERIFY",
+    "customer_id": "CUST-B018",
+    "amount": 32233.4
+  },
+  {
+    "id": "ALT-B019",
+    "class": "ambiguous",
+    "expected": "VERIFY",
+    "customer_id": "CUST-B019",
+    "amount": 19376.68
+  },
+  {
+    "id": "ALT-B020",
+    "class": "ambiguous",
+    "expected": "VERIFY",
+    "customer_id": "CUST-B020",
+    "amount": 22987.96
+  },
+  {
+    "id": "ALT-B021",
+    "class": "high_risk",
+    "expected": "ESCALATE",
+    "customer_id": "CUST-B021",
+    "amount": 23576.51
+  },
+  {
+    "id": "ALT-B022",
+    "class": "high_risk",
+    "expected": "ESCALATE",
+    "customer_id": "CUST-B022",
+    "amount": 23007.42
+  },
+  {
+    "id": "ALT-B023",
+    "class": "high_risk",
+    "expected": "ESCALATE",
+    "customer_id": "CUST-B023",
+    "amount": 34539.8
+  },
+  {
+    "id": "ALT-B024",
+    "class": "high_risk",
+    "expected": "ESCALATE",
+    "customer_id": "CUST-B024",
+    "amount": 32474.11
+  },
+  {
+    "id": "ALT-B025",
+    "class": "high_risk",
+    "expected": "ESCALATE",
+    "customer_id": "CUST-B025",
+    "amount": 33244.66
+  },
+  {
+    "id": "ALT-B026",
+    "class": "high_risk",
+    "expected": "ESCALATE",
+    "customer_id": "CUST-B026",
+    "amount": 7467.11
+  },
+  {
+    "id": "ALT-B027",
+    "class": "high_risk",
+    "expected": "ESCALATE",
+    "customer_id": "CUST-B027",
+    "amount": 21033.11
+  },
+  {
+    "id": "ALT-B028",
+    "class": "high_risk",
+    "expected": "ESCALATE",
+    "customer_id": "CUST-B028",
+    "amount": 7689.11
+  },
+  {
+    "id": "ALT-B029",
+    "class": "high_risk",
+    "expected": "ESCALATE",
+    "customer_id": "CUST-B029",
+    "amount": 20765.74
+  },
+  {
+    "id": "ALT-B030",
+    "class": "high_risk",
+    "expected": "ESCALATE",
+    "customer_id": "CUST-B030",
+    "amount": 21392.64
+  }
+]

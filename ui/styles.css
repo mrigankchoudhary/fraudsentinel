@@ -1,0 +1,163 @@
+:root{
+  --navy:#0f2744; --navy-2:#17375e; --ink:#13203a; --muted:#5d6b85;
+  --line:#dfe5ee; --bg:#f4f6fa; --card:#fff;
+  --a:#0d8a5f; --a-bg:#e6f5ee;      /* Autonomous  */
+  --h:#1d61b8; --h-bg:#e7f0fb;      /* Human       */
+  --e:#c0392b; --e-bg:#fdecea;      /* Escalation  */
+  --warn:#9a6700; --warn-bg:#fff7e0;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+     background:var(--bg);color:var(--ink)}
+h1,h2,h3{margin:0 0 .5rem;font-weight:620;letter-spacing:-.01em}
+h1{font-size:1.1rem}h2{font-size:1rem}h3{font-size:.85rem;color:var(--muted);
+   text-transform:uppercase;letter-spacing:.06em}
+a{color:var(--h)}
+code{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;
+     padding:1px 5px;border-radius:4px}
+
+/* layout */
+header{background:var(--navy);color:#fff;padding:.7rem 1.2rem;display:flex;
+       align-items:center;gap:1rem;position:sticky;top:0;z-index:20}
+header .brand{font-weight:700;letter-spacing:-.02em;font-size:1.05rem}
+header .brand span{color:#7fb2e8;font-weight:400;font-size:.8rem;margin-left:.5rem}
+header .spacer{flex:1}
+header .who{font-size:.8rem;opacity:.85}
+nav{background:var(--navy-2);display:flex;gap:.1rem;padding:0 1.2rem;overflow-x:auto;
+    position:sticky;top:44px;z-index:19}
+nav button{background:none;border:0;color:#c9d9ee;padding:.6rem .9rem;cursor:pointer;
+  font:inherit;font-size:.85rem;border-bottom:3px solid transparent;white-space:nowrap}
+nav button:hover{color:#fff}
+nav button.on{color:#fff;border-bottom-color:#7fb2e8}
+nav .count{background:rgba(255,255,255,.18);border-radius:9px;padding:0 6px;
+  margin-left:6px;font-size:.72rem}
+main{padding:1.2rem;max-width:1180px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+      padding:1rem;margin-bottom:1rem}
+.row{display:flex;gap:1rem;flex-wrap:wrap}
+.row>*{flex:1;min-width:260px}
+.muted{color:var(--muted)}
+.small{font-size:.8rem}
+
+/* banner */
+.banner{padding:.6rem .9rem;border-radius:8px;margin-bottom:1rem;font-size:.85rem;
+        border:1px solid}
+.banner.warn{background:var(--warn-bg);border-color:#e8d08a;color:var(--warn)}
+.banner.err{background:var(--e-bg);border-color:#f3c0ba;color:var(--e)}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:.74rem;
+   text-transform:uppercase;letter-spacing:.05em;padding:.45rem .6rem;
+   border-bottom:1px solid var(--line)}
+td{padding:.55rem .6rem;border-bottom:1px solid #eef1f6;vertical-align:top}
+tr.clickable:hover{background:#f7f9fc;cursor:pointer}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* badges */
+.badge{display:inline-block;padding:.1rem .45rem;border-radius:5px;font-size:.72rem;
+       font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.badge.A{background:var(--a-bg);color:var(--a)}
+.badge.H{background:var(--h-bg);color:var(--h)}
+.badge.E{background:var(--e-bg);color:var(--e)}
+.badge.flag{background:var(--e-bg);color:var(--e);margin-right:.25rem}
+.badge.new{background:#eef1f6;color:var(--muted)}
+.badge.sim{background:var(--warn-bg);color:var(--warn)}
+
+/* buttons */
+button.btn{font:inherit;font-size:.85rem;padding:.42rem .8rem;border-radius:7px;
+  border:1px solid var(--line);background:#fff;cursor:pointer}
+button.btn:hover{background:#f3f6fb}
+button.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+button.btn.primary:hover{background:var(--navy-2)}
+button.btn.ok{background:var(--a);border-color:var(--a);color:#fff}
+button.btn.danger{background:var(--e);border-color:var(--e);color:#fff}
+button.btn:disabled{opacity:.5;cursor:not-allowed}
+select,input,textarea{font:inherit;font-size:.85rem;padding:.38rem .5rem;
+  border:1px solid var(--line);border-radius:7px;background:#fff;width:100%}
+input:not(:disabled),textarea:not(:disabled){cursor:text}
+input:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:2px solid var(--h);outline-offset:1px;border-color:var(--h)}
+label{display:block;font-size:.78rem;color:var(--muted);margin:.6rem 0 .2rem}
+
+/* risk gauge */
+.gauge{height:9px;border-radius:5px;background:#e8edf5;overflow:hidden;margin:.35rem 0}
+.gauge i{display:block;height:100%;border-radius:5px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:.25rem .9rem;font-size:.85rem}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-variant-numeric:tabular-nums}
+
+/* agent cards */
+.agent{border:1px solid var(--line);border-radius:8px;padding:.75rem;background:#fcfdff}
+.agent h4{margin:0 0 .35rem;font-size:.85rem}
+.agent ul{margin:.3rem 0 0;padding-left:1.1rem}
+.agent li{margin-bottom:.2rem}
+.score{float:right;font-variant-numeric:tabular-nums;color:var(--muted);font-size:.8rem}
+
+/* evidence */
+.ev{border-bottom:1px solid #eef1f6;padding:.4rem 0;display:flex;gap:.6rem}
+.ev .id{font:12px ui-monospace,Menlo,monospace;color:var(--h);min-width:2.2rem;font-weight:600}
+.ev.untrusted{background:var(--warn-bg);border-radius:6px;padding:.4rem .5rem}
+.ev.cited .id{background:var(--h-bg);border-radius:4px;text-align:center}
+
+/* login */
+.login{max-width:360px;margin:7vh auto}
+.login .card{padding:1.5rem}
+.demo-login{font:inherit;font-size:.8rem;color:var(--h);background:none;border:0;
+  padding:0;text-decoration:underline;cursor:pointer}
+.bar{height:7px;background:var(--h);border-radius:4px;display:inline-block;
+     vertical-align:middle;margin-right:.4rem}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid #c9d9ee;
+  border-top-color:var(--navy);border-radius:50%;animation:s .7s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+
+/* table scroller ----------------------------------------------------------
+   Wraps every table (see scrollableTables in app.js) so a wide one scrolls
+   inside its card instead of stretching the page past the viewport. */
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.tscroll table{min-width:max-content}
+
+/* Long unbreakable tokens — input hashes, model slugs, references — are the
+   other thing that forces a page wider than the screen. */
+code{overflow-wrap:anywhere;word-break:break-word}
+.kv dd,.agent li,.ev span{overflow-wrap:anywhere}
+
+/* ---------------------------------------------------------------- mobile */
+@media (max-width:760px){
+  body{font-size:15px}                 /* 14px is below comfortable on a phone */
+  header{padding:.6rem .8rem;gap:.5rem;flex-wrap:wrap}
+  header .brand{font-size:.98rem}
+  header .brand span{display:none}     /* the strapline is desktop-only garnish */
+  header .who{font-size:.75rem;order:3}
+  nav{padding:0 .5rem;top:41px}
+  nav button{padding:.55rem .6rem;font-size:.82rem}
+  main{padding:.8rem}
+  .card{padding:.8rem;border-radius:8px}
+
+  /* .row is a desktop two-up; on a phone each child takes the full width.
+     min-width:260px is what made these overflow a narrow screen. */
+  .row>*{flex:1 1 100%;min-width:0;max-width:100%!important}
+
+  /* Inputs sized for a thumb, and 16px so iOS does not zoom the page on focus. */
+  select,input,textarea{font-size:16px;padding:.5rem .6rem}
+  button.btn{padding:.55rem .9rem;font-size:.9rem}
+  .btn,select,input,textarea{min-height:44px}
+
+  /* The evidence pack reads as a stacked block rather than a two-column flex. */
+  .ev{flex-wrap:wrap;gap:.25rem}
+  .ev .id{min-width:auto}
+  .ev span:last-child{flex:1 1 100%}
+
+  .kv{grid-template-columns:1fr;gap:.1rem .5rem}
+  .kv dt{margin-top:.4rem}
+  .score{float:none;display:block;margin-bottom:.15rem}
+  h1{font-size:1rem}
+}
+
+/* Very narrow phones: nothing may rely on there being room for two of anything. */
+@media (max-width:380px){
+  main{padding:.6rem}
+  .card{padding:.65rem}
+  nav button{padding:.5rem .45rem;font-size:.78rem}
+}
