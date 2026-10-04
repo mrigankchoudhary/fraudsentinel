@@ -31,14 +31,75 @@ st.set_page_config(page_title="FraudSentinel", page_icon="🛡️", layout="wide
 # app/config.py reads the environment once, at import. On Community Cloud there
 # is no .env — settings arrive as Streamlit secrets — so they have to be pushed
 # into os.environ first or the app silently comes up on the offline stub.
+# Secrets may be written either way round, because both are natural to reach for:
+#
+#   FS_LLM_PROVIDER = "openrouter"        <- flat, mirrors .env and the env vars
+#
+#   [llm]                                 <- sectioned, mirrors config.toml
+#   provider = "openrouter"
+#
+# Only the flat form used to be read, so pasting the sectioned file into the
+# Secrets box left the app on the stub with no error to explain why.
+SECTION_MAP = {
+    "llm": {
+        "provider": "FS_LLM_PROVIDER",
+        "base_url": "FS_LLM_BASE_URL",
+        "models": "FS_MODELS",
+        "api_key": "FS_LLM_API_KEY",
+        "timeout": "FS_LLM_TIMEOUT",
+    },
+    "openrouter": {
+        "api_key": "FS_OPENROUTER_API_KEY",
+        "app_name": "FS_OPENROUTER_APP_NAME",
+        "site_url": "FS_OPENROUTER_SITE_URL",
+        "providers": "FS_OPENROUTER_PROVIDERS",
+        "providers_only": "FS_OPENROUTER_PROVIDERS_ONLY",
+        "no_train": "FS_OPENROUTER_NO_TRAIN",
+    },
+    "app": {
+        "prompt_version": "FS_PROMPT_VERSION",
+        "port": "FS_PORT",
+        "db": "FS_DB",
+        "now": "FS_NOW",
+    },
+}
+
+
+def _as_env(value) -> str:
+    """TOML is typed; the environment is strings only."""
+    if isinstance(value, bool):
+        return "1" if value else "0"      # config.LLM_* read "1"/"true"/"yes"
+    if isinstance(value, (list, tuple)):
+        return ",".join(str(v) for v in value)
+    return str(value)
+
+
 def _apply_secrets() -> None:
     try:
         secrets = dict(st.secrets)
     except Exception:
-        return                      # no secrets.toml at all: defaults apply
+        return                      # no secrets at all: .env and defaults apply
+
+    applied = []
     for key, value in secrets.items():
-        if key.startswith(("FS_", "OPENROUTER_")) and value not in (None, ""):
-            os.environ.setdefault(key, str(value))
+        # Sectioned form: [llm], [openrouter], [app].
+        if key in SECTION_MAP and hasattr(value, "items"):
+            for sub, env_name in SECTION_MAP[key].items():
+                v = value.get(sub)
+                if v is None or v == "" or v == []:
+                    continue        # a blank must not shadow a provider preset
+                os.environ.setdefault(env_name, _as_env(v))
+                applied.append(env_name)
+            continue
+        # Flat form.
+        if key.startswith(("FS_", "OPENROUTER_")) and value not in (None, "", []):
+            os.environ.setdefault(key, _as_env(value))
+            applied.append(key)
+
+    # Recorded so the UI can say whether secrets arrived at all — the difference
+    # between "no secrets" and "secrets in a shape I did not read" is the whole
+    # diagnosis, and never contains a value.
+    os.environ.setdefault("FS_SECRETS_APPLIED", ",".join(sorted(set(applied))))
 
 
 _apply_secrets()
@@ -161,13 +222,37 @@ def login_view() -> None:
 # Shared rendering
 # ---------------------------------------------------------------------------
 def provider_banner() -> None:
-    if config.LLM_PROVIDER == "stub":
-        st.warning(
-            "**Simulated model provider.** Orchestration, guardrails, routing and HITL "
-            "below are real, but agent reasoning comes from the offline stub. Benchmark "
-            "figures produced in this mode are **not** a real open-model comparison — set "
-            "`FS_LLM_PROVIDER` to `ollama` (local) or `openrouter` (hosted) first.",
-            icon="⚠️")
+    if config.LLM_PROVIDER != "stub":
+        return
+    st.warning(
+        "**Simulated model provider.** Orchestration, guardrails, routing and HITL "
+        "below are real, but agent reasoning comes from the offline stub. Benchmark "
+        "figures produced in this mode are **not** a real open-model comparison.",
+        icon="⚠️")
+    # Being on the stub when you did not intend it is almost always a secrets
+    # problem, and the useful question is whether any secret arrived at all.
+    applied = [k for k in os.environ.get("FS_SECRETS_APPLIED", "").split(",") if k]
+    with st.expander("Why is this on the stub?"):
+        if not applied:
+            st.markdown(
+                "**No settings were read from Streamlit secrets.** Open the app's "
+                "**Settings → Secrets** and paste either form:\n\n"
+                "```toml\nFS_LLM_PROVIDER = \"openrouter\"\n"
+                "FS_OPENROUTER_API_KEY = \"sk-or-v1-...\"\n```\n"
+                "or the sectioned form:\n\n"
+                "```toml\n[llm]\nprovider = \"openrouter\"\n\n"
+                "[openrouter]\napi_key = \"sk-or-v1-...\"\n```")
+        elif "FS_LLM_PROVIDER" not in applied:
+            st.markdown(
+                f"Secrets were read (`{'`, `'.join(applied)}`), but none of them set "
+                "the provider. Add `FS_LLM_PROVIDER = \"openrouter\"`, or "
+                "`provider = \"openrouter\"` under `[llm]`.")
+        else:
+            st.markdown(
+                "`FS_LLM_PROVIDER` was read but resolved to `stub`. A real "
+                "environment variable beats a secret, so check for an override "
+                "wherever this is running.")
+        st.caption("Names only — no secret value is ever shown here.")
 
 
 def money(n) -> str:
