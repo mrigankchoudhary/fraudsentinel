@@ -70,6 +70,11 @@ def ensure_database() -> str:
 ensure_database()
 
 ROUTE_COLOUR = {"A": "green", "H": "blue", "E": "red"}
+ROLE_HINT = {
+    "L1": "may clear and verify, and hand a case to L2",
+    "L2": "may also hold funds and close an escalation",
+    "admin": "may also change thresholds and run the benchmark",
+}
 QUEUE_BLURB = {
     "HITL": "Medium risk, low confidence, missing evidence, or a sampled automatic "
             "decision. An investigator must decide before anything happens to the money.",
@@ -83,8 +88,46 @@ QUEUE_BLURB = {
 # ---------------------------------------------------------------------------
 # Session
 # ---------------------------------------------------------------------------
+# The demo role is kept in the query string, not only in st.session_state.
+# Session state is per-connection and is lost the moment the tab is refreshed or
+# the app wakes from sleeping, which on Community Cloud happens often enough to
+# be irritating mid-demo. The URL survives both.
+#
+# This is safe *only* because these are fixed demo credentials already printed on
+# the login page — anyone who can open the app can already sign in as admin, so
+# the query parameter grants nothing new. It would be an authentication bypass
+# against real accounts. The production path is Supabase Auth (docs/governance/).
+ROLE_PARAM = "as"
+
+
 def current_user():
-    return st.session_state.get("user")
+    if st.session_state.get("user"):
+        return st.session_state.user
+
+    # Restore from the URL after a refresh. No audit entry here: the sign-in was
+    # already recorded, and re-logging it on every rerun would bury the real ones.
+    email = st.query_params.get(ROLE_PARAM)
+    u = USERS.get(str(email).lower().strip()) if email else None
+    if u:
+        st.session_state.user = {"role": u["role"], "id": u["id"], "name": u["name"]}
+        return st.session_state.user
+    return None
+
+
+def sign_in(email: str) -> None:
+    u = USERS[email]
+    st.session_state.user = {"role": u["role"], "id": u["id"], "name": u["name"]}
+    st.query_params[ROLE_PARAM] = email
+    audit.log(None, "login", f"{u['role']}:{u['id']}")
+    st.rerun()
+
+
+def sign_out() -> None:
+    # Both, and in this order: clearing session state alone leaves the parameter
+    # in the URL, and current_user() would sign you straight back in.
+    st.query_params.clear()
+    st.session_state.clear()
+    st.rerun()
 
 
 def login_view() -> None:
@@ -99,13 +142,17 @@ def login_view() -> None:
             if not u or u["password"] != password:
                 st.error("Invalid credentials")
             else:
-                st.session_state.user = {"role": u["role"], "id": u["id"], "name": u["name"]}
-                audit.log(None, "login", f"{u['role']}:{u['id']}")
-                st.rerun()
+                sign_in(email.lower().strip())
 
     st.subheader("Demo roles")
-    st.table([{"Email": e, "Password": u["password"], "Role": u["role"]}
-              for e, u in USERS.items()])
+    st.caption("One click signs in and stays signed in across a page refresh.")
+    for addr, u in USERS.items():
+        col1, col2, col3 = st.columns([1.2, 2.2, 2.6])
+        if col1.button(f"Use {u['role']}", key=f"use-{u['role']}", width="stretch"):
+            sign_in(addr)
+        col2.markdown(f"`{addr}`")
+        col3.caption(ROLE_HINT[u["role"]])
+
     st.caption("Fixed demo credentials, as in the PoC. The production path is Supabase "
                "Auth with row-level security — see docs/governance/.")
 
@@ -604,8 +651,7 @@ def main() -> None:
         st.divider()
         st.caption(f"provider: `{config.LLM_PROVIDER}`")
         if st.button("Sign out"):
-            st.session_state.clear()
-            st.rerun()
+            sign_out()
 
     provider_banner()
 
